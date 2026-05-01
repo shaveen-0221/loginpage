@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — NIMTECH SOLUTIONS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- all rights reserved by SHAVEEN NIMSARA @ 2026 -->
+<style>
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Psionic';
+    src:url('../font/Psionic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+body{
+    align-items: center;
+    margin: 0;
+    padding: 4rem 0 0;
+    background-color: #0f1535;
+    font-family: Arial, sans-serif;
+    color: #000;
+}
+.login-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 1.5rem 3rem;
+    position: relative;
+    isolation: isolate;
+}
+
+/* Subtle logo watermark background (mirrors hero) */
+.login-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('../img/logo.png');
+    background-size: 40%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.06;
+    z-index: -1;
+}
+
+/* Glowing orbs for depth */
+.login-section::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26, 179, 226, 0.08) 0%, transparent 70%);
+    top: 10%;
+    left: -10%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ── Card ────────────────────────────────────────────── */
+.login-card {
+    width: 100%;
+    max-width: 460px;
+    background: rgba(15, 21, 53, 0.85);
+    border: 1px solid rgba(26, 179, 226, 0.25);
+    border-radius: 24px;
+    padding: 2.8rem 2.5rem 2.5rem;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 24px 64px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(26, 179, 226, 0.06);
+    backdrop-filter: blur(12px);
+    animation: loginFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes loginFadeIn {
+    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* ── Logo / Header ───────────────────────────────────── */
+.login-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+}
+
+.login-logo img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 6px;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 0 20px rgba(26,179,226,0.3);
+}
+
+.login-logo-text {
+    font-family: 'Psionic', sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.06em;
+    color: #1ab3e2;
+}
+
+.login-logo-text span {
+    color: #ffffff;
+    font-family: 'Psionic', sans-serif;
+}
+
+.login-tagline {
+    font-size: 0.78rem;
+    color: #4e5a88;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: -0.3rem;
+}
+
+/* ── Title ───────────────────────────────────────────── */
+.login-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #e9e9f0;
+    text-align: center;
+    margin: 0 0 0.35rem;
+}
+
+.login-subtitle {
+    font-size: 0.875rem;
+    color: #5a6490;
+    text-align: center;
+    margin: 0 0 2rem;
+}
+
+/* ── Tabs (Login / Register) ─────────────────────────── */
+.login-tabs {
+    display: flex;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 1.75rem;
+    gap: 4px;
+}
+
+.login-tab {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: transparent;
+    color: #4e5a88;
+    transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.login-tab.active {
+    background: linear-gradient(135deg, #1a71e2, #1ab3e2);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(26,113,226,0.35);
+}
+
+.login-tab:not(.active):hover {
+    color: #a0adcc;
+    background: rgba(255,255,255,0.06);
+}
+
+/* ── Forms ───────────────────────────────────────────── */
+.login-form,
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Hide the non-active form */
+.login-form.hidden,
+.register-form.hidden {
+    display: none;
+}
+
+/* ── Form Group ──────────────────────────────────────── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6a79a8;
+}
+
+/* Input wrapper for icon support */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Left icon — only the direct <i> child, NOT the one inside .toggle-password */
+.input-wrapper > i {
+    position: absolute;
+    left: 1rem;
+    color: #3a4a78;
+    font-size: 0.9rem;
+    pointer-events: none;        /* decorative only */
+    z-index: 1;
+    transition: color 0.2s ease;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 0.85rem 3rem 0.85rem 2.75rem; /* right padding clears the eye btn */
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: #e9e9f0;
+    font-size: 0.93rem;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    outline: none;
+}
+
+.input-wrapper input::placeholder {
+    color: #3a4a78;
+}
+
+.input-wrapper input:focus {
+    border-color: #1ab3e2;
+    background: rgba(26,179,226,0.06);
+    box-shadow: 0 0 0 3px rgba(26,179,226,0.12);
+}
+
+.input-wrapper:focus-within > i {
+    color: #1ab3e2;
+}
+
+/* Password toggle button — sits on top, fully clickable */
+.toggle-password {
+    position: absolute;
+    right: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #3a4a78;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 6px;           /* bigger hit area */
+    line-height: 1;
+    z-index: 2;             /* above the input */
+    pointer-events: all;
+    transition: color 0.2s ease;
+}
+
+.toggle-password i {
+    pointer-events: none;   /* let clicks pass through to the button */
+}
+
+.toggle-password:hover {
+    color: #1ab3e2;
+}
+
+/* ── Remember / Forgot row ───────────────────────────── */
+.login-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: -0.25rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.83rem;
+    color: #5a6490;
+    user-select: none;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #1ab3e2;
+    cursor: pointer;
+}
+
+.forgot-link {
+    font-size: 0.83rem;
+    color: #1ab3e2;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+    color: #1a71e2;
+    text-decoration: underline;
+}
+
+/* ── Submit Button ───────────────────────────────────── */
+.btn-login {
+    width: 100%;
+    padding: 0.95rem 1.5rem;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #df0e0e, #4308e4);
+    color: #ffffff;
+    font-size: 0.97rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #4308e4, #df0e0e);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(67, 8, 228, 0.35);
+}
+
+.btn-login:hover::before {
+    opacity: 1;
+}
+
+.btn-login span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Loading state */
+.btn-login.loading {
+    pointer-events: none;
+    opacity: 0.75;
+}
+
+.btn-login.loading span::after {
+    content: ' …';
+}
+
+/* ── Divider ─────────────────────────────────────────── */
+.login-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+}
+
+.login-divider span {
+    font-size: 0.75rem;
+    color: #3a4a78;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* ── Social Login Buttons ────────────────────────────── */
+.social-login {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-social {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    color: #8a93c8;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-social:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(26,179,226,0.3);
+    color: #e9e9f0;
+}
+
+.btn-social i {
+    font-size: 1rem;
+}
+
+/* ── Switch prompt ───────────────────────────────────── */
+.login-switch {
+    text-align: center;
+    font-size: 0.83rem;
+    color: #4e5a88;
+    margin-top: 0.5rem;
+}
+
+.login-switch a,
+.login-switch button {
+    color: #1ab3e2;
+    font-weight: 600;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.login-switch a:hover,
+.login-switch button:hover {
+    color: #1a71e2;
+    text-decoration: underline;
+}
+
+/* ── Toast / Alert ───────────────────────────────────── */
+.login-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    animation: alertSlide 0.3s ease both;
+}
+
+@keyframes alertSlide {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-alert.error {
+    background: rgba(223, 14, 14, 0.12);
+    border: 1px solid rgba(223, 14, 14, 0.3);
+    color: #f87171;
+}
+
+.login-alert.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+}
+
+.login-alert.hidden {
+    display: none;
+}
+
+/* ── Password Strength ───────────────────────────────── */
+.password-strength {
+    margin-top: 0.35rem;
+}
+
+.strength-bar {
+    height: 3px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+    margin-bottom: 0.3rem;
+}
+
+.strength-fill {
+    height: 100%;
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.strength-fill.weak   { width: 33%; background: #ef4444; }
+.strength-fill.medium { width: 66%; background: #f59e0b; }
+.strength-fill.strong { width: 100%; background: #10b981; }
+
+.strength-label {
+    font-size: 0.73rem;
+    color: #4e5a88;
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 2rem 1.4rem 2rem;
+        border-radius: 18px;
+    }
+
+    .login-title { font-size: 1.25rem; }
+
+    .social-login { flex-direction: column; }
+
+    .login-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .login-logo img { width: 48px; height: 48px; }
+    .login-logo-text { font-size: 1rem; }
+    .login-card { padding: 1.75rem 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+  <!-- ── Login Section ───────────────────────────────── -->
+  <section class="login-section">
+    <div class="login-card">
+
+      <!-- Logo -->
+      <div class="login-logo">
+        <img src="../img/logo.png" alt="LOGIN Logo">
+        <div class="login-logo-text">LOGIN <span>PAGE</span></div>
+        <p class="login-tagline">Your Login Portal</p>
+      </div>
+  <!-- all rights reserved by SHAVEEN NIMSARA @ 2026 -->
+      <!-- Alert (hidden by default) -->
+      <div class="login-alert hidden" id="loginAlert" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="alertMsg"></span>
+      </div>
+
+      <!-- Tabs -->
+      <div class="login-tabs" role="tablist">
+        <button class="login-tab active" id="tabLogin" role="tab" aria-selected="true" onclick="switchTab('login')">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </button>
+        <button class="login-tab" id="tabRegister" role="tab" aria-selected="false" onclick="switchTab('register')">
+          <i class="fa-solid fa-user-plus"></i> Register
+        </button>
+      </div>
+
+      <!-- ── LOGIN FORM ─────────────────────────────── -->
+      <form class="login-form" id="loginForm" novalidate>
+
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <div class="input-wrapper">
+            <input type="email" id="loginEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="loginPassword" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <i class="fa-solid fa-lock"></i>
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility" onclick="togglePwd('loginPassword', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="login-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe"> Remember me
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <span>Sign In</span>
+        </button>
+
+        <div class="login-divider"><span>or continue with</span></div>
+
+        <div class="social-login">
+          <a href="#" class="btn-social">
+            <i class="fa-brands fa-google"></i> Google
+          </a>
+          <a href="#" class="btn-social">
+            <i class="fa-brands fa-facebook-f"></i> Facebook
+          </a>
+        </div>
+
+        <p class="login-switch">
+          Don't have an account?
+          <button type="button" onclick="switchTab('register')">Register now</button>
+        </p>
+
+      </form>
+
+      <!-- ── REGISTER FORM ──────────────────────────── -->
+      <form class="register-form hidden" id="registerForm" novalidate>
+
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <div class="input-wrapper">
+            <input type="text" id="regName" name="name" placeholder="Shaveen Nimsara" autocomplete="name" required>
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Email Address</label>
+          <div class="input-wrapper">
+            <input type="email" id="regEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regPhone">Phone Number</label>
+          <div class="input-wrapper">
+            <input type="tel" id="regPhone" name="phone" placeholder="+94 7X XXX XXXX" autocomplete="tel">
+            <i class="fa-solid fa-phone"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="regPassword" name="password" placeholder="Create a strong password" autocomplete="new-password" required oninput="checkStrength(this.value)">
+            <i class="fa-solid fa-lock"></i>
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility" onclick="togglePwd('regPassword', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <!-- Password strength indicator -->
+          <div class="password-strength">
+            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+            <span class="strength-label" id="strengthLabel"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regConfirm">Confirm Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="regConfirm" name="confirm" placeholder="Repeat your password" autocomplete="new-password" required>
+            <i class="fa-solid fa-shield-halved"></i>
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility" onclick="togglePwd('regConfirm', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <span>Create Account</span>
+        </button>
+
+        <p class="login-switch">
+          Already have an account?
+          <button type="button" onclick="switchTab('login')">Sign in</button>
+        </p>
+
+      </form>
+
+    </div>
+  </section>
+
+  <!-- all rights reserved by SHAVEEN NIMSARA @ 2026 -->
+<script>
+  /* login.js — NIMTECH SOLUTIONS */
+
+/* ── Tab Switcher ─────────────────────────────────────── */
+function switchTab(tab) {
+    const loginForm    = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const tabLogin     = document.getElementById('tabLogin');
+    const tabRegister  = document.getElementById('tabRegister');
+
+    if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        tabLogin.setAttribute('aria-selected', 'true');
+        tabRegister.setAttribute('aria-selected', 'false');
+    } else {
+        registerForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        tabRegister.setAttribute('aria-selected', 'true');
+        tabLogin.setAttribute('aria-selected', 'false');
+    }
+    hideAlert();
+}
+  <!-- all rights reserved by SHAVEEN NIMSARA @ 2026 -->
+/* ── Password Visibility Toggle ───────────────────────── */
+function togglePwd(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    /* btn may be the <button> or the <i> inside — resolve to the button */
+    const button = btn.closest ? (btn.closest('.toggle-password') || btn) : btn;
+    const icon   = button.querySelector('i') || button;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+/* ── Password Strength Meter ──────────────────────────── */
+function checkStrength(value) {
+    const fill  = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    if (!fill) return;
+
+    let score = 0;
+    if (value.length >= 8)              score++;
+    if (/[A-Z]/.test(value))            score++;
+    if (/[0-9]/.test(value))            score++;
+    if (/[^A-Za-z0-9]/.test(value))     score++;
+
+    fill.className = 'strength-fill';
+    if (value.length === 0) {
+        label.textContent = '';
+        return;
+    }
+    if (score <= 1) {
+        fill.classList.add('weak');
+        label.textContent = 'Weak — try adding numbers & symbols';
+    } else if (score <= 2) {
+        fill.classList.add('medium');
+        label.textContent = 'Medium — add uppercase & special chars';
+    } else {
+        fill.classList.add('strong');
+        label.textContent = 'Strong password ✓';
+    }
+}
+
+/* ── Alert Helpers ────────────────────────────────────── */
+function showAlert(msg, type = 'error') {
+    const box = document.getElementById('loginAlert');
+    const txt = document.getElementById('alertMsg');
+    box.className = `login-alert ${type}`;
+    txt.textContent = msg;
+}
+
+function hideAlert() {
+    const box = document.getElementById('loginAlert');
+    box.classList.add('hidden');
+}
+
+/* ── Form Validation & Submit ─────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+
+    /* LOGIN */
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        hideAlert();
+
+        const email    = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !validateEmail(email)) {
+            showAlert('Please enter a valid email address.');
+            return;
+        }
+        if (!password) {
+            showAlert('Please enter your password.');
+            return;
+        }
+
+        const btn = this.querySelector('.btn-login');
+        btn.classList.add('loading');
+
+        /* Replace this block with your real auth logic / API call */
+        setTimeout(() => {
+            btn.classList.remove('loading');
+            showAlert('Signed in successfully! Redirecting…', 'success');
+            /* window.location.href = '../index.html'; */
+        }, 1500);
+    });
+
+    /* REGISTER */
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        hideAlert();
+
+        const name     = document.getElementById('regName').value.trim();
+        const email    = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const confirm  = document.getElementById('regConfirm').value;
+
+        if (!name) {
+            showAlert('Please enter your full name.');
+            return;
+        }
+        if (!email || !validateEmail(email)) {
+            showAlert('Please enter a valid email address.');
+            return;
+        }
+        if (password.length < 8) {
+            showAlert('Password must be at least 8 characters.');
+            return;
+        }
+        if (password !== confirm) {
+            showAlert('Passwords do not match.');
+            return;
+        }
+
+        const btn = this.querySelector('.btn-login');
+        btn.classList.add('loading');
+
+        /* Replace this block with your real registration API call */
+        setTimeout(() => {
+            btn.classList.remove('loading');
+            showAlert('Account created! Please sign in.', 'success');
+            setTimeout(() => switchTab('login'), 1200);
+        }, 1500);
+    });
+});
+
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+</script>
+  <!-- all rights reserved by SHAVEEN NIMSARA @ 2026 -->
+</body>
+</html>
